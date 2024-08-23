@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet, Image } from 'react-native';
 
 const mockProducts = [
   {
@@ -54,7 +54,7 @@ export default function ProductListScreen({ navigation }) {
         data={filteredProducts}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
-            <Text>{item.image}</Text>
+            <Image source={{ uri: item.image }} style={styles.image} />
             <Text>{item.description}</Text>
             <Text>{item.value}</Text>
           </View>
@@ -80,5 +80,10 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     marginBottom: 20,
+  },
+  image: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
   },
 });

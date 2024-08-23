@@ -13,7 +13,7 @@ export default function CategoryScreen() {
   return (
     <View style={styles.container}>
       <FlatList
-        data={mockCategories}
+        data={categories}
         renderItem={({ item }) => (
           <View style={styles.categoryContainer}>
             <Image source={{ uri: item.image }} style={styles.image} />

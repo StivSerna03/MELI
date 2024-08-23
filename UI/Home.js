@@ -5,7 +5,7 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Bienvenido a GamerGG Medellín</Text>
-      <Button title="Ir al Carrito de Compras" onPress={() => navigation.navigate('ShoppingCart')} />
+      <Button title="Ir al Carrito de Compras" onPress={() => navigation.navigate('ShoppingCar')} />
       <Button title="Ir a la Lista de Artículos" onPress={() => navigation.navigate('ProductList')} />
       <Button title="Ir a la Categoría de Artículos" onPress={() => navigation.navigate('Category')} />
       <Button title="Ir al Perfil" onPress={() => navigation.navigate('Profile')} />

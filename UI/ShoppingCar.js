@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, FlatList } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, FlatList, Image } from 'react-native';
 
 const mockItems = [
   {
@@ -41,7 +41,7 @@ export default function ShoppingCartScreen() {
         data={items}
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
-            <Text>{item.image}</Text>
+            <Image source={{ uri: item.image }} style={styles.image} />
             <Text>{item.description}</Text>
             <Text>{item.value}</Text>
             <TextInput
@@ -82,5 +82,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 10,
     width: '50%',
+  },
+  image: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
   },
 });
