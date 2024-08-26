@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet, Image, Button } from 'react-native';
 
 const mockProducts = [
   {
@@ -55,8 +55,14 @@ export default function ProductListScreen({ navigation }) {
         renderItem={({ item }) => (
           <View style={styles.itemContainer}>
             <Image source={{ uri: item.image }} style={styles.image} />
-            <Text>{item.description}</Text>
-            <Text>{item.value}</Text>
+            <View style={styles.itemInfo}>
+              <Text>{item.description}</Text>
+              <Text>{item.value}</Text>
+              <Button 
+                title="Ver detalles" 
+                onPress={() => navigation.navigate('ProductDetails', { product: item })}
+              />
+            </View>
           </View>
         )}
         keyExtractor={(item) => item.id}
@@ -79,7 +85,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   itemContainer: {
+    flexDirection: 'row',
     marginBottom: 20,
+  },
+  itemInfo: {
+    flex: 1,
+    justifyContent: 'space-between',
   },
   image: {
     width: 50,

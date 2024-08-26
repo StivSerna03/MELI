@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, FlatList, Image } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 const mockItems = [
   {
     id: '4',
@@ -18,6 +18,7 @@ const mockItems = [
 
 export default function ShoppingCartScreen() {
   const [items, setItems] = useState(mockItems);
+  const navigation = useNavigation();
 
   const handleDeleteItem = (id) => {
     setItems(items.filter(item => item.id !== id));
@@ -47,10 +48,11 @@ export default function ShoppingCartScreen() {
             <TextInput
               style={styles.input}
               keyboardType="numeric"
-              value={item.quantity}
+              value={item.quantity || '1'}
               onChangeText={(text) => handleIncreaseQuantity(item.id)}
             />
             <Button title="Eliminar" onPress={() => handleDeleteItem(item.id)} />
+            <Button title="Comprar" onPress={() => navigation.navigate('Payment')} />
           </View>
         )}
         keyExtractor={(item) => item.id}
