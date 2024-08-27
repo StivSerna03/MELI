@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import styles from '../globalStyles/Styles';
 
 const categories = [
   { id: '1', image: 'https://cdnx.jumpseller.com/tienda-gamer-medellin/image/47464917/resize/610/610?1712433783', name: 'Combos' },
@@ -10,14 +12,21 @@ const categories = [
 ];
 
 export default function CategoryScreen() {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <FlatList
         data={categories}
         renderItem={({ item }) => (
-          <View style={styles.categoryContainer}>
+          <View style={styles.itemContainer}>
             <Image source={{ uri: item.image }} style={styles.image} />
-            <Text>{item.name}</Text>
+            <View style={styles.itemInfo}>
+              <Text style={styles.categoryName}>{item.name}</Text>
+              <Button 
+                title="Ver productos" 
+                onPress={() => navigation.navigate('ProductList', { category: item.name })}
+              />
+            </View>
           </View>
         )}
         keyExtractor={(item) => item.id}
@@ -25,21 +34,3 @@ export default function CategoryScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  image: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-  },
-});

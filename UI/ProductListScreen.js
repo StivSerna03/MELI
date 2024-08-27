@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, TextInput, FlatList, Image, Button } from 'react-native';
+import styles from '../globalStyles/Styles';
 
 const mockProducts = [
   {
@@ -70,31 +71,3 @@ export default function ProductListScreen({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    marginBottom: 20,
-  },
-  itemInfo: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  image: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-  },
-});

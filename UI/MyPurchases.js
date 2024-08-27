@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, Image } from 'react-native';
+import styles from '../globalStyles/Styles';
 
 const mockPurchases = [
     {
@@ -43,36 +44,3 @@ export default function MyPurchases() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  purchaseContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  image: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-  },
-  infoContainer: {
-    flex: 1,
-  },
-  description: {
-    fontSize: 16,
-  },
-  status: {
-    fontSize: 14,
-    color: 'gray',
-  },
-});

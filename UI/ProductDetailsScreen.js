@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
+import styles from '../globalStyles/Styles';
 
 const mockProduct = {
   id: '1',
@@ -44,33 +45,22 @@ export default function ProductDetailsScreen() {
         onChangeText={setComment}
       />
       <Text>Calificación:</Text>
+      <View style={styles.buttonContainer}>
       <Button title="1 Estrella" onPress={() => setRating(1)} />
+      </View>
+      <View style={styles.buttonContainer}>
       <Button title="2 Estrellas" onPress={() => setRating(2)} />
+      </View>
+      <View style={styles.buttonContainer}>
       <Button title="3 Estrellas" onPress={() => setRating(3)} />
+      </View>
+      <View style={styles.buttonContainer}>
       <Button title="4 Estrellas" onPress={() => setRating(4)} />
+      </View>
+      <View style={styles.buttonContainer}>
       <Button title="5 Estrellas" onPress={() => setRating(5)} />
-
+      </View>
       {rating > 0 && <Text>Calificación: {rating} estrellas</Text>}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
-  },
-  image: {
-    width: 150,
-    height: 150,
-    marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-  },
-});

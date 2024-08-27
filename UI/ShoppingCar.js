@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, FlatList, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import styles from '../globalStyles/Styles';
+
 const mockItems = [
   {
     id: '4',
@@ -41,7 +43,7 @@ export default function ShoppingCartScreen() {
       <FlatList
         data={items}
         renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
+          <View style={styles.itemContainer1}>
             <Image source={{ uri: item.image }} style={styles.image} />
             <Text>{item.description}</Text>
             <Text>{item.value}</Text>
@@ -51,8 +53,12 @@ export default function ShoppingCartScreen() {
               value={item.quantity || '1'}
               onChangeText={(text) => handleIncreaseQuantity(item.id)}
             />
+            <View style={styles.buttonContainer}>
             <Button title="Eliminar" onPress={() => handleDeleteItem(item.id)} />
-            <Button title="Comprar" onPress={() => navigation.navigate('Payment')} />
+            <View style={styles.buttonContainer}>
+            <Button title="Pagar" onPress={() => navigation.navigate('Payment')} />
+          </View>
+          </View>
           </View>
         )}
         keyExtractor={(item) => item.id}
@@ -62,32 +68,3 @@ export default function ShoppingCartScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  itemContainer: {
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-    width: '50%',
-  },
-  image: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-  },
-});
