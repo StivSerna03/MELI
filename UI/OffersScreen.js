@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { View, Text, FlatList, Image, Button } from 'react-native';
 import styles from '../globalStyles/Styles';
 import { useNavigation } from '@react-navigation/native';
+import { useCart } from './CartContext';
 
 const mockOffers = [
   {
@@ -27,14 +28,47 @@ const mockOffers = [
   }
 ];
 
+function offersReducer(state, action) {
+  switch (action.type) {
+    case 'SET_OFFERS':
+      return { ...state, offers: action.payload };
+    case 'FILTER_OFFERS':
+      return {
+        ...state,
+        offers: state.offers.filter(offer => offer.discount.replace('%', '') >= action.payload)
+      };
+    default:
+      return state;
+  }
+}
+
 export default function OffersScreen() {
   const navigation = useNavigation();
+  const { addToCart } = useCart();
+
+  const [state, dispatch] = useReducer(offersReducer, { offers: mockOffers });
+
+  useEffect(() => {
+    console.log('Cargando ofertas...');
+    dispatch({ type: 'SET_OFFERS', payload: mockOffers });
+  }, []);
+
+  const handleAddToCart = (item) => {
+    addToCart(item);
+    console.log('Producto añadido al carrito:', item);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ofertas</Text>
 
+      <Button 
+        title="Filtrar por descuentos mayores al 30%" 
+        onPress={() => dispatch({ type: 'FILTER_OFFERS', payload: 30 })} 
+      />
+
       <FlatList
-        data={mockOffers}
+        data={state.offers}
         renderItem={({ item }) => (
           <View style={styles.offerContainer}>
             <Image source={{ uri: item.image }} style={styles.image} />
@@ -42,6 +76,10 @@ export default function OffersScreen() {
               <Text style={styles.description}>{item.description}</Text>
               <Text style={styles.value}>Valor: ${item.value}</Text>
               <Text style={styles.discount}>Descuento: {item.discount}</Text>
+              <Button 
+                title="Agregar al carrito" 
+                onPress={() => handleAddToCart(item)}
+              />
               <Button 
                 title="Ver detalles" 
                 onPress={() => navigation.navigate('ProductDetails', { product: item })}

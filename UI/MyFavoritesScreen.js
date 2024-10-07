@@ -1,50 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Image, Button } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../globalStyles/Styles';
 
-const mockFavorites = [
-  {
-    id: '1',
-    image: 'https://cdnx.jumpseller.com/tienda-gamer-medellin/image/26445972/resize/610/610?1672738540',
-    description: 'DEATHADDER V2 SPECIAL RGB - RAZER',
-    value: '280.000',
-    status: 'Disponible'
-  },
-  {
-    id: '3',
-    image: 'https://cdnx.jumpseller.com/tienda-gamer-medellin/image/48058396/resize/610/610?1714317290',
-    description: 'VULCAN MAX II MECANICO RGB USB - ROCCAT',
-    value: '960.000',
-    status: 'Disponible'
-  },
-  {
-    id: '5',
-    image: 'https://cdnx.jumpseller.com/tienda-gamer-medellin/image/51587897/resize/610/610?1723504575',
-    description: 'CORE I5 12500 + RTX 3050 - ASUS TUF',
-    value: '4.200.000',
-    status: 'Disponible'
-  }
-];
-
 export default function MyFavoritesScreen({ navigation }) {
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadFavorites();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  const loadFavorites = async () => {
+    try {
+      const storedFavorites = await AsyncStorage.getItem('favorites');
+      if (storedFavorites) {
+        setFavorites(JSON.parse(storedFavorites));
+      }
+    } catch (error) {
+      console.error('Error al cargar favoritos:', error);
+    }
+  };
+
+  const removeFromFavorites = async (productId) => {
+    try {
+      const updatedFavorites = favorites.filter(fav => fav.id !== productId);
+      await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      setFavorites(updatedFavorites);
+    } catch (error) {
+      console.error('Error al eliminar de favoritos:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mis Favoritos</Text>
 
-      <FlatList
-        data={mockFavorites}
-        renderItem={({ item }) => (
-          <View style={styles.favoriteContainer}>
-            <Image source={{ uri: item.image }} style={styles.image} />
-            <View style={styles.infoContainer}>
-              <Text style={styles.description}>{item.description}</Text>
-              <Text style={styles.status}>Estado: {item.status}</Text>
-              <Button title="Ver producto" onPress={() => navigation.navigate('ProductDetails', { product: item })} />
+      {favorites.length === 0 ? (
+        <Text style={styles.loading}>No tienes productos favoritos</Text>
+      ) : (
+        <FlatList
+          data={favorites}
+          renderItem={({ item }) => (
+            <View style={styles.favoriteContainer}>
+              <Image source={{ uri: item.imagen }} style={styles.image} />
+              <View style={styles.infoContainer}>
+                <Text style={styles.description}>{item.descripcion}</Text>
+                <Text style={styles.status}>Precio: {item.precio}</Text>
+                <Button 
+                  title="Ver producto" 
+                  onPress={() => navigation.navigate('ProductList', { productId: item.id })} 
+                />
+                <Button 
+                  title="Eliminar de favoritos" 
+                  onPress={() => removeFromFavorites(item.id)} 
+                />
+              </View>
             </View>
-          </View>
-        )}
-        keyExtractor={(item) => item.id}
-      />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      )}
     </View>
   );
 }

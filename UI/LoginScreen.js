@@ -1,35 +1,44 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../globalStyles/Styles';
 
 export default function LoginScreen({ navigation }) {
-  const [username, setUsername] = useState('JohnCena');
-  const [password, setPassword] = useState('Passw0rd!');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const validateLogin = () => {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-    
-    if (username.length > 10) {
-      Alert.alert('Error', 'El nombre de usuario no puede tener más de 10 caracteres.');
+  const validateLogin = async () => {
+    if (username.length === 0 || username.length > 10) {
+      Alert.alert('Error', 'El nombre de usuario debe tener entre 1 y 10 caracteres.');
       return;
     }
 
-    if (!passwordRegex.test(password)) {
-      Alert.alert(
-        'Error',
-        'La contraseña debe tener 8 caracteres, incluyendo 1 mayúscula, 1 caracter especial, letras y números.'
-      );
-      return;
-    }
+    try {
+      const existingUsers = await AsyncStorage.getItem('users');
+      const users = existingUsers ? JSON.parse(existingUsers) : {};
 
-    Alert.alert('Bienvenido', 'Inicio de sesión exitoso');
-    navigation.navigate('Home');
+      if (!users[username]) {
+        Alert.alert('Error', 'Usuario no encontrado');
+        return;
+      }
+
+      if (users[username].password !== password) {
+        Alert.alert('Error', 'Contraseña incorrecta');
+        return;
+      }
+
+      Alert.alert('Bienvenido', 'Inicio de sesión exitoso');
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      Alert.alert('Error', 'No se pudo completar el inicio de sesión');
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Iniciar Sesión</Text>
-      
+
       <TextInput
         style={styles.input}
         placeholder="Usuario"
@@ -48,8 +57,18 @@ export default function LoginScreen({ navigation }) {
 
       <Button title="Iniciar Sesión" onPress={validateLogin} />
 
-      <Text style={styles.registerText} onPress={() => navigation.navigate('Register')}>
+      <Text 
+        style={styles.registerText} 
+        onPress={() => navigation.navigate('Register')}
+      >
         ¿No tienes cuenta? Regístrate
+      </Text>
+
+      <Text 
+        style={styles.registerText} 
+        onPress={() => Alert.alert('Recuperar Contraseña', 'Instrucciones enviadas al correo.')}
+      >
+        ¿Olvidaste tu contraseña?
       </Text>
     </View>
   );

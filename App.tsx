@@ -14,6 +14,8 @@ import OffersScreen from './UI/OffersScreen';
 import ProfileScreen from './UI/ProfileScreen';
 import PQRScreen from './UI/PQRScreen';
 import { enableScreens } from 'react-native-screens';
+import React from 'react';
+import { CartProvider } from './UI/CartContext'; 
 
 enableScreens();
 
@@ -21,23 +23,25 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Payment" component={PaymentScreen} />
-        <Stack.Screen name="ProductList" component={ProductListScreen} />
-        <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
-        <Stack.Screen name="Category" component={CategoryScreen} />
-        <Stack.Screen name="ShoppingCar" component={ShoppingCar} />
-        <Stack.Screen name="MyPurchases" component={MyPurchases} />
-        <Stack.Screen name="MyFavorites" component={MyFavoritesScreen} />
-        <Stack.Screen name="Offers" component={OffersScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="PQRScreen" component={PQRScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <CartProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Payment" component={PaymentScreen} />
+          <Stack.Screen name="ProductList" component={ProductListScreen} />
+          <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
+          <Stack.Screen name="Category" component={CategoryScreen} />
+          <Stack.Screen name="ShoppingCar" component={ShoppingCar} />
+          <Stack.Screen name="MyPurchases" component={MyPurchases} />
+          <Stack.Screen name="MyFavorites" component={MyFavoritesScreen} />
+          <Stack.Screen name="Offers" component={OffersScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="PQRScreen" component={PQRScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </CartProvider>
   );
 }
 

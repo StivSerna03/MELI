@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useReducer, useContext, createContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
 import styles from '../globalStyles/Styles';
+
+const InteractionContext = createContext();
 
 const mockProduct = {
   id: '1',
@@ -15,10 +17,41 @@ const mockProduct = {
   paymentMethods: ['PSE', 'Tarjeta de crédito', 'Efecty']
 };
 
+function interactionReducer(state, action) {
+  switch (action.type) {
+    case 'ADD_QUESTION':
+      return { ...state, question: action.payload };
+    case 'ADD_COMMENT':
+      return { ...state, comment: action.payload };
+    case 'SET_RATING':
+      return { ...state, rating: action.payload };
+    default:
+      return state;
+  }
+}
+
 export default function ProductDetailsScreen() {
-  const [question, setQuestion] = useState('');
-  const [comment, setComment] = useState('');
-  const [rating, setRating] = useState(0);
+  const [state, dispatch] = useReducer(interactionReducer, {
+    question: '',
+    comment: '',
+    rating: 0
+  });
+
+  let globalRating, setGlobalRating;
+  try {
+    ({ globalRating, setGlobalRating } = useContext(InteractionContext));
+  } catch (error) {
+    console.warn('InteractionContext no está disponible');
+  }
+
+  useEffect(() => {
+    if (state.rating > 0) {
+      console.log(`El usuario ha calificado el producto con ${state.rating} estrellas`);
+      if (setGlobalRating) {
+        setGlobalRating(state.rating);
+      }
+    }
+  }, [state.rating, setGlobalRating]);
 
   return (
     <View style={styles.container}>
@@ -32,8 +65,8 @@ export default function ProductDetailsScreen() {
         style={styles.input}
         placeholder="Pregunta al vendedor (máximo 100 caracteres)"
         maxLength={100}
-        value={question}
-        onChangeText={setQuestion}
+        value={state.question}
+        onChangeText={(text) => dispatch({ type: 'ADD_QUESTION', payload: text })}
       />
       <Button title="Enviar pregunta" onPress={() => alert('Pregunta enviada')} />
 
@@ -41,26 +74,38 @@ export default function ProductDetailsScreen() {
         style={styles.input}
         placeholder="Comentario (máximo 200 caracteres)"
         maxLength={200}
-        value={comment}
-        onChangeText={setComment}
+        value={state.comment}
+        onChangeText={(text) => dispatch({ type: 'ADD_COMMENT', payload: text })}
       />
       <Text>Calificación:</Text>
+      
       <View style={styles.buttonContainer}>
-      <Button title="1 Estrella" onPress={() => setRating(1)} />
+        <Button title="1 Estrella" onPress={() => dispatch({ type: 'SET_RATING', payload: 1 })} />
       </View>
       <View style={styles.buttonContainer}>
-      <Button title="2 Estrellas" onPress={() => setRating(2)} />
+        <Button title="2 Estrellas" onPress={() => dispatch({ type: 'SET_RATING', payload: 2 })} />
       </View>
       <View style={styles.buttonContainer}>
-      <Button title="3 Estrellas" onPress={() => setRating(3)} />
+        <Button title="3 Estrellas" onPress={() => dispatch({ type: 'SET_RATING', payload: 3 })} />
       </View>
       <View style={styles.buttonContainer}>
-      <Button title="4 Estrellas" onPress={() => setRating(4)} />
+        <Button title="4 Estrellas" onPress={() => dispatch({ type: 'SET_RATING', payload: 4 })} />
       </View>
       <View style={styles.buttonContainer}>
-      <Button title="5 Estrellas" onPress={() => setRating(5)} />
+        <Button title="5 Estrellas" onPress={() => dispatch({ type: 'SET_RATING', payload: 5 })} />
       </View>
-      {rating > 0 && <Text>Calificación: {rating} estrellas</Text>}
+      
+      {state.rating > 0 && <Text>Calificación: {state.rating} estrellas</Text>}
     </View>
+  );
+}
+
+export function InteractionProvider({ children }) {
+  const [globalRating, setGlobalRating] = useState(0);
+
+  return (
+    <InteractionContext.Provider value={{ globalRating, setGlobalRating }}>
+      {children}
+    </InteractionContext.Provider>
   );
 }

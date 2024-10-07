@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { View, Text, TextInput, Button, Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../globalStyles/Styles';
 
 export default function RegisterScreen({ navigation }) {
-  const [username, setUsername] = useState('JohnCena');
-  const [password, setPassword] = useState('Passw0rd!');
-  const [email, setEmail] = useState('john.cena@example.com');
-  const [birthdate, setBirthdate] = useState('1995-08-15');
-  const [address, setAddress] = useState('Calle 123 #45-67');
-  const [country, setCountry] = useState('Colombia');
-  const [department, setDepartment] = useState('Antioquia');
-  const [city, setCity] = useState('Medellín');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [address, setAddress] = useState('');
+  const [country, setCountry] = useState('');
+  const [department, setDepartment] = useState('');
+  const [city, setCity] = useState('');
 
   const validateRegistration = () => {
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const today = new Date();
-    const birthDate = new Date(birthdate);
-    const age = today.getFullYear() - birthDate.getFullYear();
-    const isValidAge = age >= 18 && age <= 50;
 
-    if (username.length > 10) {
-      Alert.alert('Error', 'El nombre de usuario no puede tener más de 10 caracteres.');
-      return;
+    if (username.length === 0 || username.length > 10) {
+      Alert.alert('Error', 'El nombre de usuario debe tener entre 1 y 10 caracteres.');
+      return false;
     }
 
     if (!passwordRegex.test(password)) {
@@ -31,26 +27,40 @@ export default function RegisterScreen({ navigation }) {
         'Error',
         'La contraseña debe tener 8 caracteres, incluyendo 1 mayúscula, 1 caracter especial, letras y números.'
       );
-      return;
+      return false;
     }
 
     if (!emailRegex.test(email)) {
-      Alert.alert('Error', 'Ingrese un correo electrónico válido.');
-      return;
+      Alert.alert('Error', 'Por favor, ingresa un email válido');
+      return false;
     }
 
-    if (!isValidAge) {
-      Alert.alert('Error', 'No está en el rango de edad para crear la cuenta.');
-      return;
-    }
+    return true;
+  };
 
-    if (address.length > 30) {
-      Alert.alert('Error', 'La dirección no puede tener más de 30 caracteres.');
-      return;
-    }
+  const handleRegister = async () => {
+    if (validateRegistration()) {
+      try {
+        // Verificar si el usuario ya existe
+        const existingUsers = await AsyncStorage.getItem('users');
+        const users = existingUsers ? JSON.parse(existingUsers) : {};
 
-    Alert.alert('Éxito', 'Usuario registrado con éxito');
-    navigation.navigate('Login');
+        if (users[username]) {
+          Alert.alert('Error', 'Este nombre de usuario ya está registrado');
+          return;
+        }
+
+        // Guardar el nuevo usuario
+        users[username] = { password, email, birthdate, address, country, department, city };
+        await AsyncStorage.setItem('users', JSON.stringify(users));
+
+        Alert.alert('Éxito', 'Usuario registrado correctamente');
+        navigation.navigate('Login');
+      } catch (error) {
+        console.error('Error al registrar usuario:', error);
+        Alert.alert('Error', 'No se pudo completar el registro');
+      }
+    }
   };
 
   return (
@@ -59,67 +69,57 @@ export default function RegisterScreen({ navigation }) {
 
       <TextInput
         style={styles.input}
-        placeholder="Usuario"
-        maxLength={10}
+        placeholder="Nombre de usuario"
         value={username}
         onChangeText={setUsername}
+        maxLength={10}
       />
-
       <TextInput
         style={styles.input}
         placeholder="Contraseña"
-        secureTextEntry
         value={password}
         onChangeText={setPassword}
+        secureTextEntry
       />
-
       <TextInput
         style={styles.input}
         placeholder="Correo electrónico"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
       />
-
       <TextInput
         style={styles.input}
-        placeholder="Fecha de nacimiento (YYYY-MM-DD)"
+        placeholder="Fecha de nacimiento"
         value={birthdate}
         onChangeText={setBirthdate}
       />
-
       <TextInput
         style={styles.input}
         placeholder="Dirección"
-        maxLength={30}
         value={address}
         onChangeText={setAddress}
       />
+      <TextInput
+        style={styles.input}
+        placeholder="País"
+        value={country}
+        onChangeText={setCountry}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Departamento"
+        value={department}
+        onChangeText={setDepartment}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Ciudad"
+        value={city}
+        onChangeText={setCity}
+      />
 
-      <Picker
-        selectedValue={department}
-        style={styles.picker}
-        onValueChange={(itemValue) => setDepartment(itemValue)}
-      >
-        <Picker.Item label="Antioquia" value="Antioquia" />
-        <Picker.Item label="Cundinamarca" value="Cundinamarca" />
-        <Picker.Item label="Cordoba" value="Cordoba" />
-        <Picker.Item label="Amazonas" value="Amazonas" />
-        <Picker.Item label="Santander" value="Santander" />
-      </Picker>
-
-      <Picker
-        selectedValue={city}
-        style={styles.picker}
-        onValueChange={(itemValue) => setCity(itemValue)}
-      >
-        <Picker.Item label="Medellín" value="Medellín" />
-        <Picker.Item label="Envigado" value="Envigado" />
-        <Picker.Item label="Itagui" value="Itagui" />
-        <Picker.Item label="Bogota" value="Bogota" />
-        <Picker.Item label="Sabaneta" value="Sabaneta" />
-      </Picker>
-
-      <Button title="Registrar" onPress={validateRegistration} />
+      <Button title="Registrarse" onPress={handleRegister} />
     </View>
   );
 }

@@ -146,4 +146,12 @@ export default StyleSheet.create({
     fontSize: 14,
     color: 'red',
   },
+  forgotPassword: {
+    marginTop: 15,
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
+  buttonContainer: {
+    marginVertical: 10,
+  },
 });

@@ -7,8 +7,13 @@ export default function PQRScreen() {
   const [description, setDescription] = useState('');
 
   const handleSubmit = () => {
-    if (requestType === '' || description.length === 0) {
-      Alert.alert('Error', 'Por favor, completa todos los campos.');
+    if (requestType === '') {
+      Alert.alert('Error', 'Por favor, selecciona un tipo de solicitud.');
+      return;
+    }
+
+    if (description.length === 0) {
+      Alert.alert('Error', 'Por favor, completa la descripción de la solicitud.');
       return;
     }
 
@@ -32,6 +37,7 @@ export default function PQRScreen() {
         style={styles.picker}
         onValueChange={(itemValue) => setRequestType(itemValue)}
       >
+        <Picker.Item label="Seleccione una opción" value="" />
         <Picker.Item label="Queja" value="complaint" />
         <Picker.Item label="Petición" value="request" />
         <Picker.Item label="Recurso" value="appeal" />
@@ -56,35 +62,30 @@ export default function PQRScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
   },
   label: {
     fontSize: 16,
-    marginBottom: 10,
-    alignSelf: 'flex-start',
+    marginBottom: 5,
   },
   picker: {
-    width: '100%',
-    height: 50,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 20,
+    backgroundColor: '#fff',
+    marginBottom: 15,
   },
   input: {
-    width: '100%',
-    height: 100,
-    borderColor: 'gray',
+    backgroundColor: '#fff',
     borderWidth: 1,
-    paddingHorizontal: 10,
-    marginBottom: 20,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 15,
     textAlignVertical: 'top',
   },
 });
