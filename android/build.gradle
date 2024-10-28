@@ -12,10 +12,30 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle")
+        classpath("com.android.tools.build:gradle:7.4.2")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("com.google.gms:google-services:4.3.10")
     }
 }
 
-apply plugin: "com.facebook.react.rootproject"
+apply plugin: "com.android.application"
+apply plugin: "com.google.gms.google-services"
+
+android {
+    compileSdkVersion compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.yourapp"
+        minSdkVersion minSdkVersion
+        targetSdkVersion targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+}
+
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:33.5.0')
+    implementation 'com.google.firebase:firebase-analytics'
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "468902127557",
+    "project_id": "mercadolibredm-86944",
+    "storage_bucket": "mercadolibredm-86944.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468902127557:android:04f34d4e2fe7fa757c8dac",
+        "android_client_info": {
+          "package_name": "com.company.Meli"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIkfu9i0NXAXrjJaB07AA_v3OkK_ibADw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

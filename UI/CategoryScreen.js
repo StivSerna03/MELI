@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, FlatList, TouchableOpacity, Button, TextInput, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../globalStyles/Styles';
 
@@ -12,19 +12,35 @@ const categories = [
 ];
 
 const CategoryItem = ({ category, onPress }) => (
-  <View style={styles.itemContainer}>
-    <Image source={{ uri: category.image }} style={styles.image} />
-    <View style={styles.itemInfo}>
-      <Text style={styles.categoryName}>{category.name}</Text>
-      <TouchableOpacity onPress={onPress} style={styles.button}>
-        <Text style={styles.buttonText}>Ver productos</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
+  <Pressable 
+    onPress={onPress} 
+    style={({ pressed }) => [
+      styles.categoryItem,
+      { opacity: pressed ? 0.7 : 1 }
+    ]}
+  >
+    <Image source={{ uri: category.image }} style={styles.categoryImage} />
+    <Text style={styles.categoryName}>{category.name}</Text>
+  </Pressable>
 );
 
 export default function CategoryScreen() {
   const navigation = useNavigation();
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const toggleMenu = () => setMenuVisible(!menuVisible);
+
+  const handleSearch = () => {
+    console.log('Búsqueda:', searchQuery);
+  };
+
+  const headerItems = [
+    { title: "Inicio", route: "Home" },
+    { title: "Productos", route: "ProductList" },
+    { title: "PQR", route: "PQRScreen" },
+    { title: "Ofertas", route: "Offers" },
+  ];
 
   const renderItem = ({ item }) => (
     <CategoryItem 
@@ -35,11 +51,59 @@ export default function CategoryScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={categories}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />
+      <View style={styles.header}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Buscar categorías..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          onSubmitEditing={handleSearch}
+        />
+        <Button
+          title="Menú"
+          onPress={toggleMenu}
+        />
+      </View>
+
+      {menuVisible && (
+        <View style={styles.menu}>
+          {headerItems.map((item, index) => (
+            <Button
+              key={index}
+              title={item.title}
+              onPress={() => {
+                navigation.navigate(item.route);
+                toggleMenu();
+              }}
+            />
+          ))}
+        </View>
+      )}
+
+      <View style={styles.content}>
+        <Text style={styles.title}>Categorías</Text>
+        <FlatList
+          data={categories}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+        />
+      </View>
+
+      <View style={styles.footer}>
+        <Button
+          title="Inicio"
+          onPress={() => navigation.navigate('Home')}
+        />
+        <Button
+          title="Perfil"
+          onPress={() => navigation.navigate('Profile')}
+        />
+        <Button
+          title="Carrito"
+          onPress={() => navigation.navigate('ShoppingCar')}
+        />
+      </View>
     </View>
   );
 }

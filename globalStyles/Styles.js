@@ -1,11 +1,14 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
+const itemWidth = (width - 30) / 2;
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#f9f9f9',
     marginBottom: 10,
   },
   itemContainer: {
@@ -30,7 +33,8 @@ export default StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: 'black',
+    textAlign: 'center',
+    color: '#333',
   },
   buttonContainer: {
     marginBottom: 10, 
@@ -43,20 +47,19 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 50,
+    borderColor: '#ccc',
     borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 15,
     marginBottom: 15,
-    paddingHorizontal: 10,
-    width: '100%',
+    backgroundColor: 'white',
   },
   registerText: {
     color: 'blue',
     marginTop: 20,
     textDecorationLine: 'underline',
-    marginLeft: 20,
-    marginRight: 20,
-    alignSelf: 'center',  
+    textAlign: 'center',
   },
   status: {
     fontSize: 14,
@@ -153,5 +156,122 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     marginVertical: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+  },
+  logo: {
+    width: 100,
+    height: 40,
+    resizeMode: 'contain',
+  },
+  menuButton: {
+    padding: 10,
+  },
+  menu: {
+    position: 'absolute',
+    top: 60,
+    right: 10,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    elevation: 5,
+    zIndex: 1000,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+  },
+  categoryItem: {
+    width: itemWidth,
+    marginHorizontal: 5,
+    marginVertical: 10,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    overflow: 'hidden',
+  },
+  categoryImage: {
+    width: '100%',
+    height: 150,
+    resizeMode: 'cover',
+  },
+  categoryName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    padding: 10,
+    color: '#333',
+  },
+  categoryDescription: {
+    fontSize: 14,
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+    color: '#666',
+  },
+  username: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  email: {
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  birthDate: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    marginTop: 20,
+  },
+  productItem: {
+    width: itemWidth,
+    marginVertical: 10,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  productName: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  productDescription: {
+    fontSize: 14,
+    color: '#666',
+  },
+  productPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
   },
 });

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../globalStyles/Styles';
+import auth from '@react-native-firebase/auth'; 
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState('');
@@ -41,7 +42,6 @@ export default function RegisterScreen({ navigation }) {
   const handleRegister = async () => {
     if (validateRegistration()) {
       try {
-        // Verificar si el usuario ya existe
         const existingUsers = await AsyncStorage.getItem('users');
         const users = existingUsers ? JSON.parse(existingUsers) : {};
 
@@ -50,12 +50,25 @@ export default function RegisterScreen({ navigation }) {
           return;
         }
 
-        // Guardar el nuevo usuario
-        users[username] = { password, email, birthdate, address, country, department, city };
+        await auth().createUserWithEmailAndPassword(email, password);
+
+        const newUser = { 
+          username, 
+          password, 
+          email, 
+          birthdate, 
+          address, 
+          country, 
+          department, 
+          city 
+        };
+        users[username] = newUser;
         await AsyncStorage.setItem('users', JSON.stringify(users));
 
+        await AsyncStorage.setItem('currentUser', JSON.stringify(newUser));
+
         Alert.alert('Éxito', 'Usuario registrado correctamente');
-        navigation.navigate('Login');
+        navigation.navigate('Profile');
       } catch (error) {
         console.error('Error al registrar usuario:', error);
         Alert.alert('Error', 'No se pudo completar el registro');

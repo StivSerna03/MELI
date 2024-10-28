@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './UI/LoginScreen';
@@ -14,18 +15,31 @@ import OffersScreen from './UI/OffersScreen';
 import ProfileScreen from './UI/ProfileScreen';
 import PQRScreen from './UI/PQRScreen';
 import { enableScreens } from 'react-native-screens';
-import React from 'react';
 import { CartProvider } from './UI/CartContext'; 
+import firebase from '@react-native-firebase/app'; 
 
 enableScreens();
 
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
+};
+
 const Stack = createStackNavigator();
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig); 
+}
 
 export default function App() {
   return (
     <CartProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Home" component={Home} />
@@ -44,4 +58,3 @@ export default function App() {
     </CartProvider>
   );
 }
-
