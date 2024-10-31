@@ -67,7 +67,6 @@ export default function ProfileScreen({ navigation }) {
         ))}
       </View>
 
-      {/* Contenido del perfil */}
       <View style={styles.content}>
         <Text style={styles.username}>Usuario: {user.username}</Text>
         <Text style={styles.email}>Correo: {user.email}</Text>
