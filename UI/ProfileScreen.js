@@ -6,7 +6,6 @@ import auth from '@react-native-firebase/auth';
 
 export default function ProfileScreen({ navigation }) {
   const [user, setUser] = useState(null);
-  const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState(''); 
   useEffect(() => {
     const loadUser = async () => {
@@ -52,20 +51,6 @@ export default function ProfileScreen({ navigation }) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>No has iniciado sesión</Text>
-        <TextInput 
-          placeholder="Correo" 
-          value={email} 
-          onChangeText={setEmail} 
-          style={styles.input} 
-        />
-        <TextInput 
-          placeholder="Contraseña" 
-          value={password} 
-          onChangeText={setPassword} 
-          secureTextEntry 
-          style={styles.input} 
-        />
-        <Button title="Iniciar sesión" onPress={handleLogin} />
       </View>
     );
   }

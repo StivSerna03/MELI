@@ -21,12 +21,12 @@ import firebase from '@react-native-firebase/app';
 enableScreens();
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyDIkfu9i0NXAXrjJaB07AA_v3OkK_ibADw",
+  authDomain: "mercadolibredm-86944.firebaseapp.com",
+  projectId: "mercadolibredm-86944",
+  storageBucket: "mercadolibredm-86944.appspot.com",
+  messagingSenderId: "468902127557",
+  appId: "1:468902127557:android:04f34d4e2fe7fa757c8dac",
 };
 
 const Stack = createStackNavigator();

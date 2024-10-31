@@ -95,6 +95,10 @@ export default function Home({ navigation }) {
           onPress={() => navigation.navigate('Profile')}
         />
         <Button
+          title="Perfil"
+          onPress={() => navigation.navigate('Login')}
+        />
+        <Button
           title="Carrito"
           onPress={() => navigation.navigate('ShoppingCar')}
         />

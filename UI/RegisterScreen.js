@@ -50,25 +50,28 @@ export default function RegisterScreen({ navigation }) {
           return;
         }
 
-        await auth().createUserWithEmailAndPassword(email, password);
+        await auth().createUserWithEmailAndPassword(email, password)
+          .then(async (userCredential) => {
+            const newUser = { 
+              username, 
+              email, 
+              birthdate, 
+              address, 
+              country, 
+              department, 
+              city 
+            };
+            users[username] = newUser;
+            await AsyncStorage.setItem('users', JSON.stringify(users));
+            await AsyncStorage.setItem('currentUser', JSON.stringify(newUser));
 
-        const newUser = { 
-          username, 
-          password, 
-          email, 
-          birthdate, 
-          address, 
-          country, 
-          department, 
-          city 
-        };
-        users[username] = newUser;
-        await AsyncStorage.setItem('users', JSON.stringify(users));
-
-        await AsyncStorage.setItem('currentUser', JSON.stringify(newUser));
-
-        Alert.alert('Éxito', 'Usuario registrado correctamente');
-        navigation.navigate('Profile');
+            Alert.alert('Éxito', 'Usuario registrado correctamente');
+            navigation.navigate('Profile');
+          })
+          .catch((error) => {
+            const errorMessage = error.message;
+            Alert.alert('Error', errorMessage);
+          });
       } catch (error) {
         console.error('Error al registrar usuario:', error);
         Alert.alert('Error', 'No se pudo completar el registro');

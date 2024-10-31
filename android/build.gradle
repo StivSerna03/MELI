@@ -1,9 +1,9 @@
 buildscript {
     ext {
-        buildToolsVersion = "34.0.0"
-        minSdkVersion = 23
-        compileSdkVersion = 34
-        targetSdkVersion = 34
+        buildToolsVersion = "31.0.0"
+        minSdkVersion = 21
+        compileSdkVersion = 31
+        targetSdkVersion = 31
         ndkVersion = "26.1.10909125"
         kotlinVersion = "1.9.24"
     }
@@ -12,7 +12,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.4.2")
+        classpath("com.android.tools.build:gradle:7.0.3")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("com.google.gms:google-services:4.3.10")
@@ -38,4 +38,11 @@ android {
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.5.0')
     implementation 'com.google.firebase:firebase-analytics'
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
