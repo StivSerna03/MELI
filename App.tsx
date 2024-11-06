@@ -16,7 +16,8 @@ import ProfileScreen from './UI/ProfileScreen';
 import PQRScreen from './UI/PQRScreen';
 import { enableScreens } from 'react-native-screens';
 import { CartProvider } from './UI/CartContext'; 
-import firebase from '@react-native-firebase/app'; 
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
 
 enableScreens();
 
@@ -31,9 +32,8 @@ const firebaseConfig = {
 
 const Stack = createStackNavigator();
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig); 
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export default function App() {
   return (

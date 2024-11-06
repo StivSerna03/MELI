@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, Alert } from 'react-native';
-import { initMercadoPago, MercadoPago } from '@mercadopago/sdk-react';
+import { initMercadoPago, MercadoPago, CardForm } from '@mercadopago/sdk-react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../globalStyles/Styles';
+import { getAuth } from 'firebase/auth';
 
 
 initMercadoPago('APP_USR-901bd3ea-4cf4-4cc1-af50-2c09a5e84ea8'); 
 
 export default function ShoppingCar({ navigation }) {
   const [cartItems, setCartItems] = useState([]);
+  const [cardToken, setCardToken] = useState(null);
 
   useEffect(() => {
     const loadCartItems = async () => {
@@ -24,18 +26,26 @@ export default function ShoppingCar({ navigation }) {
     loadCartItems();
   }, []);
 
-  const handlePayment = async () => {
-    try {
-      const paymentData = {
-        transactionAmount: calculateTotal(), 
-        token: 'APP_USR-4132402169044906-110609-4ab91d7026c05a67b1bea087e737d4ba-2079128435',
-        description: 'Compra en la tienda',
-        installments: 1,
-        payer: {
-          email: 'payer_email@example.com',
-        },
-      };
+  const handleCardToken = async (token) => {
+    setCardToken(token);
+    await handlePayment(token);
+  };
 
+  const handlePayment = async (token) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    const paymentData = {
+      transactionAmount: calculateTotal(),
+      token: token,
+      description: 'Compra en la tienda',
+      installments: cartItems.length,
+      payer: {
+        email: user ? user.email : 'default_email@example.com',
+      },
+    };
+
+    try {
       const paymentResult = await MercadoPago.payment.create(paymentData);
       if (paymentResult.status === 'approved') {
         Alert.alert('Pago aprobado', 'Gracias por tu compra!');
@@ -65,7 +75,11 @@ export default function ShoppingCar({ navigation }) {
           </View>
         ))
       )}
-      <Button title="Pagar" onPress={handlePayment} />
+      <CardForm
+        onCardToken={handleCardToken}
+        onError={(error) => console.error(error)}
+      />
+      <Button title="Pagar" onPress={() => handlePayment(cardToken)} />
     </View>
   );
 }

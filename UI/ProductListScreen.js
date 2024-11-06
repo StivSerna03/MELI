@@ -78,6 +78,18 @@ export default function ProductListScreen({ route, navigation }) {
     }
   };
 
+  const addToCartHandler = async (product) => {
+    try {
+      const storedCartItems = await AsyncStorage.getItem('cartItems');
+      const cartItems = storedCartItems ? JSON.parse(storedCartItems) : [];
+      cartItems.push(product); // Agrega el producto al carrito
+      await AsyncStorage.setItem('cartItems', JSON.stringify(cartItems));
+      Alert.alert('Éxito', 'Producto agregado al carrito');
+    } catch (error) {
+      console.error('Error al agregar el producto al carrito:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -97,7 +109,7 @@ export default function ProductListScreen({ route, navigation }) {
               <Text>{item.precio}</Text>
               <Button 
                 title="Agregar al carrito" 
-                onPress={() => addToCart(item)}
+                onPress={() => addToCartHandler(item)}
               />
               <Button 
                 title="Ver detalles" 
