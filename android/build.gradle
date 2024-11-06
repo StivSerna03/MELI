@@ -16,6 +16,7 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("com.google.gms:google-services:4.3.10")
+        classpath("org.codehaus.groovy:groovy-all:3.0.9")
     }
 }
 
@@ -23,10 +24,11 @@ apply plugin: "com.android.application"
 apply plugin: "com.google.gms.google-services"
 
 android {
-    compileSdkVersion compileSdkVersion
+    namespace 'com.company.Meli'
+    compileSdkVersion 34
 
     defaultConfig {
-        applicationId "com.yourapp"
+        applicationId packageName
         minSdkVersion minSdkVersion
         targetSdkVersion targetSdkVersion
         versionCode 1
@@ -38,11 +40,47 @@ android {
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.5.0')
     implementation 'com.google.firebase:firebase-analytics'
-}
+    implementation 'org.codehaus.groovy:groovy:3.0.9'
+    implementation 'org.codehaus.groovy:groovy-json:3.0.9'
 
 allprojects {
     repositories {
         google()
         mavenCentral()
     }
+}
+
+project.ext {
+  set('react-native', [
+    versions: [
+      android : [
+        minSdk    : 21, 
+        targetSdk : 33,
+        compileSdk: 34, 
+      ],
+
+      firebase: [
+        bom           : "33.5.1"
+      ],
+    ],
+  ])
+}
+
+def packageJson = project.file('../package.json').text
+def parsedJson = jsonSlurper.parseText(packageJson)
+
+def packageName = parsedJson.name ?: 'com.default.package'
+
+android {
+    namespace 'com.company.Meli'
+    compileSdkVersion 34
+
+    defaultConfig {
+        applicationId packageName
+        minSdkVersion minSdkVersion
+        targetSdkVersion targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+}
 }

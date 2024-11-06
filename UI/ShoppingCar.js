@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../globalStyles/Styles';
 
 
-initMercadoPago('YOUR_PUBLIC_KEY'); 
+initMercadoPago('APP_USR-901bd3ea-4cf4-4cc1-af50-2c09a5e84ea8'); 
 
 export default function ShoppingCar({ navigation }) {
   const [cartItems, setCartItems] = useState([]);
@@ -28,7 +28,7 @@ export default function ShoppingCar({ navigation }) {
     try {
       const paymentData = {
         transactionAmount: calculateTotal(), 
-        token: 'YOUR_PAYMENT_TOKEN',
+        token: 'APP_USR-4132402169044906-110609-4ab91d7026c05a67b1bea087e737d4ba-2079128435',
         description: 'Compra en la tienda',
         installments: 1,
         payer: {
